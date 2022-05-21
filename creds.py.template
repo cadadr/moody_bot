@@ -1,0 +1,5 @@
+# creds.py
+
+client_key = "..."
+client_secret = "..."
+access_token = "..."

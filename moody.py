@@ -9,15 +9,17 @@ import time
 
 from mastodon import Mastodon
 
+import creds
+
 # TODO: support nobot?
 
 DELAY = 15
 
 client = Mastodon(
     api_base_url  = 'mastodon.social',
-    client_id     = input("Client key: "),
-    client_secret = input("Client secret: "),
-    access_token  = input("Access token: ")
+    client_id     = creds.client_key,
+    client_secret = creds.client_secret,
+    access_token  = creds.access_token
 )
 
 round = 0
