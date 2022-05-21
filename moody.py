@@ -13,38 +13,6 @@ from mastodon import Mastodon
 
 DELAY = 15
 
-replies = [
-    "oh ffs take a hike",
-    "I could use less of your company",
-    "go see if I'm over there, will you",
-    "oh my phone's ringing in the other room, will you excuse me please",
-    "make thee scarce, blockest thou my sunshine",
-    "fuckin'.... yeah yeah alright",
-    "you're blocked, your mother is blocked, your elementary school teacher is blocked!!!",
-    "aaaaaaaa hell no, take off",
-    "our conversation is yet to begin and yet I've had enough of you",
-    "do you know the tame impala song... the less I see you the better 🎶"
-]
-
-posts = [
-    "I'm unimpressed",
-    "your presence is underwhelming",
-    "don't dare talk to me",
-    "there's something foul in the atmosphere",
-    "boring boring boring boring boring boring boring bori bob brob borb bob",
-    "life exists to annoy me",
-    "why would you follow me, when I hate you all this much???",
-    "fucksy daisies",
-    "If you grow bored so easily, perhaps it’s from listening to yourself.\n—Robin Wayne Bailey",
-    "But her life was as cold as an attic facing north; and boredom, like a silent spider, was weaving its web in the shadows, in every corner of her heart.\n—Gustave Flaubert in Madame Bovary",
-    "Idleness is fatal only to the mediocre.\n—Albert Camus",
-    "one day I was so bored I considered talking to you",
-    "roses are red\nviolets are blue\nyou make me sick\nbut I'm better with a flu",
-    "tinky-winky, dipsy, lala, fuck yooooouu!!!",
-    "fuck off, fuck off,\nfuck off fuck off fuck off fuck ooooofff,\nfu-fu-fu-fuuuck-off",
-    "over there, behind the mountains, there exists a cute little village. go there and stay there and never come back please thank you very much"
-]
-
 client = Mastodon(
     api_base_url  = 'mastodon.social',
     client_id     = input("Client key: "),
@@ -56,6 +24,9 @@ round = 0
 last_posted_hour = 0
 
 while(True):
+    replies = [line.strip() for line in open("replies.txt").readlines()]
+    posts = [line.strip() for line in open("posts.txt").readlines()]
+
     round += 1
     replied_to = 0
     time_cookie = time.strftime("%F%T%z")
