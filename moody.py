@@ -24,8 +24,10 @@ round = 0
 last_posted_hour = 0
 
 while(True):
-    replies = [line.strip() for line in open("replies.txt").readlines()]
-    posts = [line.strip() for line in open("posts.txt").readlines()]
+    replies = [line.strip().replace("\\n", "\n")
+               for line in open("replies.txt").readlines()]
+    posts = [line.strip().replace("\\n", "\n")
+             for line in open("posts.txt").readlines()]
 
     round += 1
     replied_to = 0
