@@ -17,3 +17,13 @@ change the virtualenv directory).
 
     $ sudo apt-get install python3-venv
     $ python3 -m venv .venv
+
+# Licence
+
+“Moody Bot” is non-violent software: you can use, redistribute, and/or
+modify it under the terms of the CNPLv6+ as found in the LICENSE file
+in the source code root directory or at
+<https://git.pixie.town/thufie/CNPL>.
+
+“Moody Bot” comes with ABSOLUTELY NO WARRANTY, to the extent permitted
+by applicable law. See the CNPL for details.
