@@ -1,81 +1,40 @@
 # moody bot
 
+# TODO: support nobot?
+
 # https://mastodonpy.readthedocs.io/en/stable/
 
 # https://src.xhrpb.com/human.equivalent/mastodon-bot-test/
 
 import random
+import sys
 import time
 
 from mastodon import Mastodon
 
 import creds
 
-# TODO: support nobot?
 
 DELAY = 15
 
-client = Mastodon(
-    api_base_url  = creds.instance,
-    client_id     = creds.client_key,
-    client_secret = creds.client_secret,
-    access_token  = creds.access_token
-)
 
-round = 0
-last_posted_hour = 0
+def usage():
+    print("moody.py: usage: moody.py reply|post")
+    exit(1)
 
-while(True):
+
+def reply(client):
     replies = [line.strip().replace("\\n", "\n")
                for line in open("replies.txt").readlines()]
-    posts = [line.strip().replace("\\n", "\n")
-             for line in open("posts.txt").readlines()]
-
-    round += 1
-    replied_to = 0
-    time_cookie = time.strftime("%F%T%z")
-
-    print(f"{time_cookie} round: {round}")
-
-    hour = int(time.strftime("%H"))
-
-    if hour % 6 == 0 and hour != last_posted_hour:
-        print(f"{time_cookie} post time!")
-
-        last_posted_hour = hour
-        random.shuffle(posts)
-        post = posts[0]
-
-        print(f"will post: {post}")
-
-        try:
-            status = client.status_post(
-                post,
-                visibility = "unlisted",
-                language = "en"
-            )
-
-        except Exception as e:
-            print(f"oh noes, {e}")
-
-        print("ok posted")
-
     notifications = client.notifications()
 
     for notification in notifications:
         n_id = notification["id"]
+        n_acct = notification.account.acct
 
         if notification.type == "mention":
-            n_acct = notification.account.acct
-
-            # TODO: don’t modify the list!
             random.shuffle(replies)
             reply = replies[0]
-            last_reply = reply
-            time_cookie = time.strftime("%F%T%z")
-
-            print(f"{time_cookie} mention detected, id: {n_id}")
-            print(f"saying: {reply} to @{n_acct} in {DELAY} seconds...")
 
             time.sleep(DELAY)
 
@@ -88,17 +47,47 @@ while(True):
                     language = "en"
                 )
             except mastodon.Mastodon.MastodonNotFoundError:
-                print("Oh noes, 404")
-
-            print("ok replied")
-            replied_to += 1
+                pass
 
         try:
-            print(f"dismiss id: {n_id}")
             client.notifications_dismiss(n_id)
         except mastodon.Mastodon.MastodonNotFoundError:
-            print("Oh noes, 404")
+            pass
 
-    factor = 10
-    print(f"replied to {replied_to} mentions, next round in {DELAY * factor} secs")
-    time.sleep(DELAY * factor)
+
+def post(client):
+    post_candidates = [
+        line.strip().replace("\\n", "\n")
+        for line in open("posts.txt").readlines()
+    ]
+    random.shuffle(post_candidates)
+    post = post_candidates[0]
+    client.status_post(
+        post,
+        visibility = "unlisted",
+        language = "en"
+    )
+
+
+def run(mode):
+    client = Mastodon(
+        api_base_url  = creds.instance,
+        client_id     = creds.client_key,
+        client_secret = creds.client_secret,
+        access_token  = creds.access_token
+    )
+
+    if   mode == "reply": reply(client)
+    elif mode == "post":  post(client)
+    else:                 usage() # should be unreachable
+
+
+if __name__ == '__main__':
+    try:
+        mode = sys.argv[1]
+        if mode not in ["reply", "post"]:
+            usage()
+    except IndexError:
+        usage()
+
+    run(mode)

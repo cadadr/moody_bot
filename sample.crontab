@@ -1,0 +1,5 @@
+# crontab entries for moody bot
+
+# min	hr	day	month	week	command to be executed
+*/5	*	*	*	*	$HOME/moody_bot/run.bash reply
+30	*/4	*	*	*	$HOME/moody_bot/run.bash post
