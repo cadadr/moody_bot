@@ -13,6 +13,6 @@ cd "$script_dir"
 . .venv/bin/activate
 
 case $1 in
-    reply) python moody.py reply ;;
-    post)  python moody.py post  ;;
+    reply) python3 moody.py reply ;;
+    post)  python3 moody.py post  ;;
 esac
