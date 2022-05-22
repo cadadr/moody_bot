@@ -16,7 +16,7 @@ import creds
 DELAY = 15
 
 client = Mastodon(
-    api_base_url  = 'mastodon.social',
+    api_base_url  = creds.instance,
     client_id     = creds.client_key,
     client_secret = creds.client_secret,
     access_token  = creds.access_token
